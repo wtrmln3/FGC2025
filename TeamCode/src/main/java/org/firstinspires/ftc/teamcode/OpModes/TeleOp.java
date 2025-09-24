@@ -1,69 +1,96 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.Subsystems.Clutch;
-import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.Subsystems.Intake;
-import org.firstinspires.ftc.teamcode.Subsystems.Lift;
-import org.firstinspires.ftc.teamcode.Subsystems.TakeServos;
-
+import org.firstinspires.ftc.teamcode.Commands.*;
+import org.firstinspires.ftc.teamcode.Subsystems.*;
 
 @Config
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp")
-public class TeleOp extends LinearOpMode{
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp")
+public class TeleOp extends CommandOpMode {
+
+    private Drivetrain drive;
+    private Intake intake;
+    private Lift lift;
+    private TakeServos takeServos;
+    private Clutch clutch;
+    private Vision vision;
+
+    private GamepadEx gamepadEx1;
+    private GamepadEx gamepadEx2;
+
     @Override
-    public void runOpMode(){
-        Drivetrain drive = new Drivetrain(hardwareMap);
-        Intake intake = new Intake(hardwareMap);
-        Clutch clutch = new Clutch(hardwareMap);
-        TakeServos takeServos = new TakeServos(hardwareMap);
-        Lift lift = new Lift(hardwareMap);
+    public void initialize() {
+        //Subsystems
+        drive = new Drivetrain(hardwareMap);
+        intake = new Intake(hardwareMap);
+        lift = new Lift(hardwareMap);
+        takeServos = new TakeServos(hardwareMap);
+        clutch = new Clutch(hardwareMap);
+        vision = new Vision(hardwareMap);
 
-        GamepadEx gamepadEx1 = new GamepadEx(gamepad1);
-        GamepadEx gamepadEx2 = new GamepadEx(gamepad2);
+        //Gamepads
+        gamepadEx1 = new GamepadEx(gamepad1);
+        gamepadEx2 = new GamepadEx(gamepad2);
 
-        waitForStart();
+        //Default drive command
+        drive.setDefaultCommand(
+                new DriveCommand(
+                        drive,
+                        () -> -gamepadEx1.getLeftY(),
+                        () -> -gamepadEx1.getRightY()
+                )
+        );
 
-        while(opModeIsActive()){
-            double leftPower = -gamepad1.left_stick_y;
-            double rightPower = gamepad1.right_stick_y;
-            drive.tankDrive(leftPower, rightPower);
+        // Bindings
+        // Intake
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
+                .whileHeld(new IntakeCommand(intake, 1.0));
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+                .whileHeld(new IntakeCommand(intake, -1.0));
 
-            if(gamepadEx1.getButton(GamepadKeys.Button.A)){
-                intake.setPower(1.0);
-            }else if(gamepadEx1.getButton(GamepadKeys.Button.B)){
-                intake.setPower(-1.0);
-            }else{
-                intake.stop();
-            }
+        // Slow mode toggle
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                .whenPressed(drive::switchSlowMode);
 
-            if (gamepadEx2.getButton(GamepadKeys.Button.Y)) {
-                lift.setPower(1.0);         // up
-            } else if (gamepadEx2.getButton(GamepadKeys.Button.A)) {
-                lift.setPower(-1.0);        // down
-            } else {
-                lift.stop();
-            }
+        // Vision tag alignment
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
+                .whileHeld(new GoToTagCommand(drive, vision, telemetry, gamepad1));
 
-            if (gamepadEx2.getButton(GamepadKeys.Button.X)) {
-                takeServos.setPower(1.0);   // forward
-            } else if (gamepadEx2.getButton(GamepadKeys.Button.B)) {
-                takeServos.setPower(-1.0);  // reverse
-            } else {
-                takeServos.stop();
-            }
+        // Lift
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.Y)
+                .whileHeld(new LiftCommand(lift, 1.0));
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
+                .whileHeld(new LiftCommand(lift, -1.0));
 
-            if (gamepadEx1.getButton(GamepadKeys.Button.DPAD_DOWN)) {
-                drive.switchSlowMode();     // toggle slow mode
-            }
+        // TakeServos
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.X)
+                .whileHeld(new TakeServosCommand(takeServos, 1.0));
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.B)
+                .whileHeld(new TakeServosCommand(takeServos, -1.0));
 
+        // Clutch
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+                .whenPressed(clutch::open);
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                .whenPressed(clutch::close);
+
+        telemetry.addLine("TeleOp initialized");
+        telemetry.update();
+    }
+
+    @Override
+    public void run() {
+        super.run();
+
+        if (vision != null && vision.getFirstDetection() != null) {
+            telemetry.addData("AprilTag ID", vision.getFirstDetection().id);
+        } else {
+            telemetry.addLine("No AprilTag detected");
         }
-
-
+        telemetry.update();
     }
 }
