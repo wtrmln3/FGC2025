@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.Commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import org.firstinspires.ftc.teamcode.Subsystems.TakeServos;
+import org.firstinspires.ftc.teamcode.Subsystems.ArmIntake;
 
-public class TakeServosCommand extends CommandBase{
-    private TakeServos servo;
+public class ArmIntakeCommand extends CommandBase{
+    private ArmIntake servo;
     private double power;
 
-    public TakeServosCommand(TakeServos servo, double power){
+    public ArmIntakeCommand(ArmIntake servo, double power){
         this.servo = servo;
         this.power = power;
 

@@ -4,11 +4,11 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class Lift extends SubsystemBase {
+public class Hang extends SubsystemBase {
     private DcMotor lift_1;
     private DcMotor lift_2;
 
-    public Lift(HardwareMap hardwareMap) {
+    public Hang(HardwareMap hardwareMap) {
         lift_1 = hardwareMap.dcMotor.get("lift_1");
         lift_2 = hardwareMap.dcMotor.get("lift_2");
 

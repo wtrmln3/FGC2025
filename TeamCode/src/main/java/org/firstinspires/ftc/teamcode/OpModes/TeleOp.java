@@ -14,8 +14,8 @@ public class TeleOp extends CommandOpMode {
 
     private Drivetrain drive;
     private Intake intake;
-    private Lift lift;
-    private TakeServos takeServos;
+    private Hang hang;
+    private ArmIntake armIntake;
     private Clutch clutch;
     private Vision vision;
 
@@ -27,8 +27,8 @@ public class TeleOp extends CommandOpMode {
         //Subsystems
         drive = new Drivetrain(hardwareMap);
         intake = new Intake(hardwareMap);
-        lift = new Lift(hardwareMap);
-        takeServos = new TakeServos(hardwareMap);
+        hang = new Hang(hardwareMap);
+        armIntake = new ArmIntake(hardwareMap);
         clutch = new Clutch(hardwareMap);
         vision = new Vision(hardwareMap);
 
@@ -58,25 +58,34 @@ public class TeleOp extends CommandOpMode {
 
         // Vision tag alignment
         gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
-                .whileHeld(new GoToTagCommand(drive, vision, telemetry, gamepad1));
+                .whileHeld(new DetectTagCommand(drive, vision, telemetry, gamepad1));
 
-        // Lift
+        // Hang
         gamepadEx2.getGamepadButton(GamepadKeys.Button.Y)
-                .whileHeld(new LiftCommand(lift, 1.0));
+                .whileHeld(new HangCommand(hang, 1.0));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
-                .whileHeld(new LiftCommand(lift, -1.0));
+                .whileHeld(new HangCommand(hang, -1.0));
 
-        // TakeServos
+        // ArmIntake
         gamepadEx2.getGamepadButton(GamepadKeys.Button.X)
-                .whileHeld(new TakeServosCommand(takeServos, 1.0));
+                .whileHeld(new ArmIntakeCommand(armIntake, 1.0));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.B)
-                .whileHeld(new TakeServosCommand(takeServos, -1.0));
+                .whileHeld(new ArmIntakeCommand(armIntake, -1.0));
+
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                        .whenPressed(new MoveDoorCommand(armIntake, 0));
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+                        .whenPressed(new MoveDoorCommand(armIntake, 500));
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+                        .whenPressed(new MoveDoorCommand(armIntake, 1000));
 
         // Clutch
         gamepadEx2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whenPressed(clutch::open);
         gamepadEx2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whenPressed(clutch::close);
+
+
 
         telemetry.addLine("TeleOp initialized");
         telemetry.update();

@@ -7,14 +7,14 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class GoToTagCommand extends CommandBase{
+public class DetectTagCommand extends CommandBase{
     private Drivetrain drivetrain;
     private Vision vision;
     private Telemetry telemetry;
     private Gamepad gamepad;
     private boolean hasRumbled;
 
-    public GoToTagCommand(Drivetrain drivetrain, Vision vision, Telemetry telemetry, Gamepad gamepad){
+    public DetectTagCommand(Drivetrain drivetrain, Vision vision, Telemetry telemetry, Gamepad gamepad){
         this.drivetrain = drivetrain;
         this.vision = vision;
         this.telemetry = telemetry;

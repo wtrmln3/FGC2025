@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.Commands;
 
-import org.firstinspires.ftc.teamcode.Subsystems.Lift;
+import org.firstinspires.ftc.teamcode.Subsystems.Hang;
 import com.arcrobotics.ftclib.command.CommandBase;
 
-public class LiftCommand extends CommandBase {
-    private Lift lift;
+public class HangCommand extends CommandBase {
+    private Hang lift;
     private double power;
 
-    public LiftCommand(Lift lift, double power){
+    public HangCommand(Hang lift, double power){
         this.lift = lift;
         this.power = power;
 

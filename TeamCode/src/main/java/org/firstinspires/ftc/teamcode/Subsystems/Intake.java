@@ -5,17 +5,17 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class Intake extends SubsystemBase {
-    private DcMotor drum_intake;
+    private DcMotor suck;
 
     public Intake(HardwareMap hardwareMap){
-        drum_intake = hardwareMap.dcMotor.get("drum_intake");
+        suck = hardwareMap.dcMotor.get("drum_intake");
 
-        drum_intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        drum_intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        suck.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        suck.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void setPower(double power){
-        drum_intake.setPower(power);
+        suck.setPower(power);
     }
 
     public void stop(){
