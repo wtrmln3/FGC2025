@@ -9,8 +9,8 @@ public class Hang extends SubsystemBase {
     private DcMotor hang_2;
 
     public Hang(HardwareMap hardwareMap) {
-        hang_1 = hardwareMap.dcMotor.get("lift_1");
-        hang_2 = hardwareMap.dcMotor.get("lift_2");
+        hang_1 = hardwareMap.dcMotor.get("hang_1");
+        hang_2 = hardwareMap.dcMotor.get("hang_2");
 
         hang_1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         hang_2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
