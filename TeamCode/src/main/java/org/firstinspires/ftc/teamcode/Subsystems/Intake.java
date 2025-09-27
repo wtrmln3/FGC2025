@@ -8,7 +8,7 @@ public class Intake extends SubsystemBase {
     private DcMotor suck;
 
     public Intake(HardwareMap hardwareMap){
-        suck = hardwareMap.dcMotor.get("drum_intake");
+        suck = hardwareMap.dcMotor.get("suck");
 
         suck.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         suck.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
