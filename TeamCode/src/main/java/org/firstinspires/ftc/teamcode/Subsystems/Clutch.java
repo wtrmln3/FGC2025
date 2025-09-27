@@ -34,4 +34,10 @@ public class Clutch {
         setPosition(CLOSED);
     }
 
+    public double getPosition() {
+        // average of both servos
+        return (clutch_1.getPosition() + clutch_2.getPosition()) / 2.0;
+    }
+
+
 }

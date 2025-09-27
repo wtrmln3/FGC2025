@@ -18,6 +18,7 @@ public class TeleOp extends CommandOpMode {
     private ArmIntake armIntake;
     private Clutch clutch;
     private Vision vision;
+    private Push push;
 
     private GamepadEx gamepadEx1;
     private GamepadEx gamepadEx2;
@@ -31,6 +32,7 @@ public class TeleOp extends CommandOpMode {
         armIntake = new ArmIntake(hardwareMap);
         clutch = new Clutch(hardwareMap);
         vision = new Vision(hardwareMap);
+        push = new Push(hardwareMap);
 
         //Gamepads
         gamepadEx1 = new GamepadEx(gamepad1);
@@ -84,6 +86,13 @@ public class TeleOp extends CommandOpMode {
                 .whenPressed(clutch::open);
         gamepadEx2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whenPressed(clutch::close);
+
+
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                .whenPressed(push::open);
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .whenPressed(push::close);
+
 
 
 

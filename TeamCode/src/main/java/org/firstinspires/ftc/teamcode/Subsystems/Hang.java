@@ -5,23 +5,23 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Hang extends SubsystemBase {
-    private DcMotor lift_1;
-    private DcMotor lift_2;
+    private DcMotor hang_1;
+    private DcMotor hang_2;
 
     public Hang(HardwareMap hardwareMap) {
-        lift_1 = hardwareMap.dcMotor.get("lift_1");
-        lift_2 = hardwareMap.dcMotor.get("lift_2");
+        hang_1 = hardwareMap.dcMotor.get("lift_1");
+        hang_2 = hardwareMap.dcMotor.get("lift_2");
 
-        lift_1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        lift_2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        hang_1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        hang_2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        lift_1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lift_2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hang_1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hang_2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public void setPower(double power){
-        lift_1.setPower(power);
-        lift_2.setPower(power);
+        hang_1.setPower(power);
+        hang_2.setPower(power);
     }
 
     public void stop(){
