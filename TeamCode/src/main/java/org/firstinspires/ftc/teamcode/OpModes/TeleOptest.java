@@ -4,14 +4,8 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
-import org.firstinspires.ftc.teamcode.Subsystems.ArmIntakeTest;
-import org.firstinspires.ftc.teamcode.Subsystems.Clutch;
-import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.Subsystems.Hang;
-import org.firstinspires.ftc.teamcode.Subsystems.Intake;
-import org.firstinspires.ftc.teamcode.Subsystems.Push;
-import org.firstinspires.ftc.teamcode.Subsystems.Vision;
-import org.firstinspires.ftc.teamcode.Commands.ClutchPushSequence;
+import org.firstinspires.ftc.teamcode.Subsystems.*;
+import org.firstinspires.ftc.teamcode.Commands.*;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOptest")
@@ -31,20 +25,23 @@ public class TeleOptest extends CommandOpMode {
 
     @Override
     public void initialize() {
-        drivetrain = new Drivetrain(hardwareMap);
-        armIntake = new ArmIntakeTest(hardwareMap);
-        clutch = new Clutch(hardwareMap);
-        push = new Push(hardwareMap);
-        hang = new Hang(hardwareMap);
-        intake = new Intake(hardwareMap);
-        vision = new Vision(hardwareMap);
-
         gamepadEx1 = new GamepadEx(gamepad1);
 
-        //Drivetrain
-        //in execute() default
+        // Drivetrain
+        //drivetrain = new Drivetrain(hardwareMap);
+
+
+        // Intake
+        /*intake = new Intake(hardwareMap);
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
+                .whileHeld(new IntakeCommand(intake, 1.0));
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+                .whileHeld(new IntakeCommand(intake, -1.0));
+        */
 
         //Arm Intake
+        /*
+        armIntake = new ArmIntakeTest(hardwareMap);
         gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whileHeld(armIntake::intakeForward);
         gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whileHeld(armIntake::intakeReverse);
         gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(armIntake::stopIntake);
@@ -54,8 +51,13 @@ public class TeleOptest extends CommandOpMode {
 
         gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> armIntake.setDoorTarget(500));
         gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(() -> armIntake.setDoorTarget(0));
+        */
 
-        //Clutch and Push
+        //Clutch + Push
+        /*
+        clutch = new Clutch(hardwareMap);
+        push = new Push(hardwareMap);
+
         gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .whenPressed(new ClutchPushSequence(clutch, push));
 
@@ -63,34 +65,39 @@ public class TeleOptest extends CommandOpMode {
         gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(clutch::close);
         gamepadEx1.getGamepadButton(GamepadKeys.Button.START).whenPressed(push::open);
         gamepadEx1.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(push::close);
+        */
 
-        //Hang
+        // Hang
+        /*
+        hang = new Hang(hardwareMap);
         gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whileHeld(() -> hang.setPower(1));
         gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whileHeld(() -> hang.setPower(-1));
         gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(hang::stop);
+        */
 
-        telemetry.addLine("Tester Ready");
+        // Vision
+        /*
+        vision = new Vision(hardwareMap);
+        */
+
+        telemetry.addLine("Tester Ready (uncomment subsystems to test)");
         telemetry.update();
     }
 
     @Override
     public void run() {
         // Drivetrain Tank Drive
-        drivetrain.tankDrive(-gamepad1.left_stick_y, -gamepad1.right_stick_y);
+        if (drivetrain != null) {
+            drivetrain.tankDrive(-gamepad1.left_stick_y, -gamepad1.right_stick_y);
+        }
 
-        // Intake triggers
-        double intakePower = 0;
-        if (gamepad1.right_trigger > 0.1) intakePower = 1;
-        else if (gamepad1.left_trigger > 0.1) intakePower = -1;
-        intake.setPower(intakePower);
-
-        // Vision
-        AprilTagDetection detection = vision.getFirstDetection();
-        if (detection != null) telemetry.addData("AprilTag ID", detection.id);
-        else telemetry.addData("Detection", "None");
-
+        // Vision Telemetry
+        if (vision != null) {
+            AprilTagDetection detection = vision.getFirstDetection();
+            if (detection != null) telemetry.addData("AprilTag ID", detection.id);
+            else telemetry.addData("Detection", "None");
+        }
 
         telemetry.update();
     }
-
 }
