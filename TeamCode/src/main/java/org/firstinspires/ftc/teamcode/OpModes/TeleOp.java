@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
@@ -47,7 +48,7 @@ public class TeleOp extends CommandOpMode {
                 )
         );
 
-        // Bindings
+        // Button bindings
         // Intake
         gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
                 .whileHeld(new IntakeCommand(intake, 1.0));
@@ -69,16 +70,16 @@ public class TeleOp extends CommandOpMode {
                 .whileHeld(new HangCommand(hang, -1.0));
 
         // ArmIntake
-        gamepadEx2.getGamepadButton(GamepadKeys.Button.X)
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
                 .whileHeld(new ArmIntakeCommand(armIntake, 1.0));
-        gamepadEx2.getGamepadButton(GamepadKeys.Button.B)
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.Y)
                 .whileHeld(new ArmIntakeCommand(armIntake, -1.0));
 
-        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                         .whenPressed(new MoveDoorCommand(armIntake, 0));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
                         .whenPressed(new MoveDoorCommand(armIntake, 500));
-        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                         .whenPressed(new MoveDoorCommand(armIntake, 1000));
 
         // Clutch
@@ -87,13 +88,12 @@ public class TeleOp extends CommandOpMode {
         gamepadEx2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whenPressed(clutch::close);
 
+        //Push
+        new Trigger(() -> gamepadEx2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
+                .whenActive(() -> push.open());
 
-        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .whenPressed(push::open);
-        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whenPressed(push::close);
-
-
+        new Trigger(() -> gamepadEx2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
+                .whenActive(() -> push.close());
 
 
         telemetry.addLine("TeleOp initialized");
