@@ -20,7 +20,6 @@ public class TeleOpTest extends CommandOpMode {
     private Clutch clutch;
     private Push push;
     private Vision vision;
-
     private DriveController driveController;
     private IntakeController intakeController;
     private HangController hangController;
@@ -28,6 +27,7 @@ public class TeleOpTest extends CommandOpMode {
     private ClutchController clutchController;
     private PushController pushController;
     private VisionController visionController;
+    private ClutchPushController clutchPushController;
 
     @Override
     public void initialize() {
@@ -48,6 +48,7 @@ public class TeleOpTest extends CommandOpMode {
         clutchController = new ClutchController(clutch, gamepad2);
         pushController = new PushController(push, clutch, gamepad2, CommandScheduler.getInstance());
         visionController = new VisionController(vision, telemetry, gamepad1);
+        clutchPushController = new ClutchPushController(clutch, push, gamepad2);
 
 
         telemetry.addLine("TeleOp initialized");

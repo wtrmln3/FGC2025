@@ -12,8 +12,8 @@ public class HangController {
         GamepadEx gamepadEx = new GamepadEx(gamepad);
 
         gamepadEx.getGamepadButton(GamepadKeys.Button.B)
-                .whileHeld(new HangCommand(hang, 1.0));
+                .whileHeld(new HangCommand(hang, 0.5));
         gamepadEx.getGamepadButton(GamepadKeys.Button.X)
-                .whileHeld(new HangCommand(hang, -1.0));
+                .whileHeld(new HangCommand(hang, -0.5));
     }
 }
