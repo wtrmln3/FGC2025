@@ -13,8 +13,8 @@ public class ArmIntake extends SubsystemBase{
     private DcMotorEx door;
     private PIDController pid;
 
-    private  double kP = 0.02, kI = 0.006, kD = 0.001;
-    private int targetPosition = 0;
+    private  double kP = 0.01, kI = 0.003, kD = 0.005;
+    private int targetPosition;
 
     public ArmIntake(HardwareMap hardwareMap) {
         take_1 = hardwareMap.get(CRServo.class, "take_1");
@@ -25,9 +25,10 @@ public class ArmIntake extends SubsystemBase{
         take_2.setDirection(CRServo.Direction.FORWARD);
 
         door.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        door.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        door.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         pid = new PIDController(kP, kI, kD);
+        targetPosition = door.getCurrentPosition();
 
         stop();
     }

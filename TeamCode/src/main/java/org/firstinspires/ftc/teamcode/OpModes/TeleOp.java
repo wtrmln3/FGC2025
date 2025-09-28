@@ -26,7 +26,7 @@ public class TeleOp extends CommandOpMode {
 
     @Override
     public void initialize() {
-        //Subsystems
+        // Subsystems
         drive = new Drivetrain(hardwareMap);
         intake = new Intake(hardwareMap);
         hang = new Hang(hardwareMap);
@@ -35,21 +35,28 @@ public class TeleOp extends CommandOpMode {
         vision = new Vision(hardwareMap);
         push = new Push(hardwareMap);
 
-        //Gamepads
+        // Gamepads
         gamepadEx1 = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
 
-        //Default drive command
+        // Default drive command (sticks control, but only moves if input != 0)
         drive.setDefaultCommand(
                 new DriveCommand(
                         drive,
-                        () -> -gamepadEx1.getLeftY(),
-                        () -> -gamepadEx1.getRightY()
+                        () -> {
+                            double y = -gamepadEx1.getLeftY();
+                            return Math.abs(y) > 0.05 ? y : 0.0;   // deadzone
+                        },
+                        () -> {
+                            double y = -gamepadEx1.getRightY();
+                            return Math.abs(y) > 0.05 ? y : 0.0;   // deadzone
+                        }
                 )
         );
 
-        // Button bindings
-        // Intake
+        //              Subsystem Controls
+
+        // Intake (Gamepad1)
         gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
                 .whileHeld(new IntakeCommand(intake, 1.0));
         gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
@@ -63,37 +70,42 @@ public class TeleOp extends CommandOpMode {
         gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
                 .whileHeld(new DetectTagCommand(drive, vision, telemetry, gamepad1));
 
-        // Hang
-        gamepadEx2.getGamepadButton(GamepadKeys.Button.Y)
+        // Hang (Gamepad2 → B & X)
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.B)
                 .whileHeld(new HangCommand(hang, 1.0));
-        gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.X)
                 .whileHeld(new HangCommand(hang, -1.0));
 
-        // ArmIntake
+        // ArmIntake (Gamepad2 → A & Y)
         gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
                 .whileHeld(new ArmIntakeCommand(armIntake, 1.0));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.Y)
                 .whileHeld(new ArmIntakeCommand(armIntake, -1.0));
 
+        // Door positions (Gamepad2 D-Pad)
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                        .whenPressed(new MoveDoorCommand(armIntake, 0));
+                .whenPressed(new MoveDoorCommand(armIntake, 0));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                        .whenPressed(new MoveDoorCommand(armIntake, 500));
+                .whenPressed(new MoveDoorCommand(armIntake, 10));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                        .whenPressed(new MoveDoorCommand(armIntake, 1000));
+                .whenPressed(new MoveDoorCommand(armIntake, 30));
 
-        // Clutch
+        // Clutch (Gamepad2 bumpers)
         gamepadEx2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whenPressed(clutch::open);
         gamepadEx2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whenPressed(clutch::close);
 
-        //Push
+        // Push (Gamepad2 triggers)
         new Trigger(() -> gamepadEx2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
-                .whenActive(() -> push.open());
+                .whileActiveContinuous(() -> push.open());
 
         new Trigger(() -> gamepadEx2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
-                .whenActive(() -> push.close());
+                .whileActiveContinuous(() -> push.close());
+
+        new Trigger(() -> gamepadEx2.getButton(GamepadKeys.Button.X)
+                && gamepadEx2.getButton(GamepadKeys.Button.Y))
+                .whenActive(() -> schedule(new ClutchPushSequence(clutch, push)));
 
 
         telemetry.addLine("TeleOp initialized");
@@ -104,11 +116,6 @@ public class TeleOp extends CommandOpMode {
     public void run() {
         super.run();
 
-        if (vision != null && vision.getFirstDetection() != null) {
-            telemetry.addData("AprilTag ID", vision.getFirstDetection().id);
-        } else {
-            telemetry.addLine("No AprilTag detected");
-        }
         telemetry.update();
     }
 }
