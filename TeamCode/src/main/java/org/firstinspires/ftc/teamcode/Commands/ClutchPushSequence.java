@@ -11,23 +11,23 @@ import org.firstinspires.ftc.teamcode.Subsystems.Push;
 public class ClutchPushSequence extends SequentialCommandGroup {
     public ClutchPushSequence(Clutch clutch, Push push) {
         addCommands(
-                new InstantCommand(() -> clutch.setPosition(0.1)),
-                new WaitCommand(500), // wait 0.5 seconds for servo to reach
+                new InstantCommand(() -> clutch.setPosition(0.9)),
+                new WaitCommand(300),   // wait 300 ms for servo to finish
 
                 new InstantCommand(push::open),
-                new WaitCommand(500),
+                new WaitCommand(300),
 
                 new InstantCommand(clutch::close),
-                new WaitCommand(500),
+                new WaitCommand(300),
 
-                new InstantCommand(() -> clutch.setPosition(0.1)),
-                new WaitCommand(500),
+                new InstantCommand(() -> clutch.setPosition(0.9)),
+                new WaitCommand(300),
 
                 new InstantCommand(push::close),
-                new WaitCommand(500),
+                new WaitCommand(300),
 
                 new InstantCommand(clutch::close),
-                new WaitCommand(500)
+                new WaitCommand(300)
         );
 
     }

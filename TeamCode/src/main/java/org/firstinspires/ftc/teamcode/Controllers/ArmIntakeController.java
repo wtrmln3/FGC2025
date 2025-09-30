@@ -22,8 +22,8 @@ public class ArmIntakeController {
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenPressed(new MoveDoorCommand(armIntake, 0));
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(new MoveDoorCommand(armIntake, 10));
-        gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                 .whenPressed(new MoveDoorCommand(armIntake, 30));
+        gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .whenPressed(new MoveDoorCommand(armIntake, 60));
     }
 }

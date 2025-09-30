@@ -3,38 +3,39 @@ package org.firstinspires.ftc.teamcode.OpModes;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.Commands.DetectTagCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.*;
 import org.firstinspires.ftc.teamcode.Controllers.*;
 
 @Config
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOpTest")
 public class TeleOpTest extends CommandOpMode {
 
     private Drivetrain drive;
-    private Intake intake;
-    private Hang hang;
+    private HangIntake hangIntake;
     private ArmIntake armIntake;
     private Clutch clutch;
     private Push push;
     private Vision vision;
+
     private DriveController driveController;
-    private IntakeController intakeController;
-    private HangController hangController;
+    private HangIntakeController hangIntakeController;
     private ArmIntakeController armIntakeController;
     private ClutchController clutchController;
     private PushController pushController;
     private VisionController visionController;
     private ClutchPushController clutchPushController;
+    private GamepadEx gamepad;
 
     @Override
     public void initialize() {
         // Initialize subsystems
+        //gamepad1.rumble(1.0, 1.0, 500);
+
         drive = new Drivetrain(hardwareMap);
-        intake = new Intake(hardwareMap);
-        hang = new Hang(hardwareMap);
+        hangIntake = new HangIntake(hardwareMap);
         armIntake = new ArmIntake(hardwareMap);
         clutch = new Clutch(hardwareMap);
         push = new Push(hardwareMap);
@@ -42,8 +43,7 @@ public class TeleOpTest extends CommandOpMode {
 
         // Initialize controllers
         driveController = new DriveController(drive, gamepad1);
-        intakeController = new IntakeController(intake, gamepad1);
-        hangController = new HangController(hang, gamepad2);
+        hangIntakeController = new HangIntakeController(hangIntake, gamepad2);
         armIntakeController = new ArmIntakeController(armIntake, gamepad2);
         clutchController = new ClutchController(clutch, gamepad2);
         pushController = new PushController(push, clutch, gamepad2, CommandScheduler.getInstance());
@@ -55,9 +55,10 @@ public class TeleOpTest extends CommandOpMode {
         telemetry.update();
     }
 
-
     @Override
     public void run() {
-        super.run();
+        super.run(); // keeps CommandScheduler working
+
+        telemetry.update();
     }
 }
