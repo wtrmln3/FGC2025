@@ -12,9 +12,12 @@ import org.firstinspires.ftc.teamcode.Commands.DetectTagCommand;
 public class VisionController {
     public VisionController(Vision vision, Telemetry telemetry, Gamepad gamepad) {
         GamepadEx gamepadEx = new GamepadEx(gamepad);
+
         DetectTagCommand detectTagCommand = new DetectTagCommand(vision, telemetry, gamepad);
 
+        // Schedule on press, cancel on release
         new Trigger(() -> gamepadEx.getButton(GamepadKeys.Button.X))
-                .whileActiveContinuous(() -> CommandScheduler.getInstance().schedule(detectTagCommand));
+                .whenActive(() -> CommandScheduler.getInstance().schedule(detectTagCommand))
+                .whenInactive(() -> CommandScheduler.getInstance().cancel(detectTagCommand));
     }
 }

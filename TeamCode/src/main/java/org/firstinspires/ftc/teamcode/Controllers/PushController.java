@@ -7,7 +7,6 @@ import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.Subsystems.Push;
 import org.firstinspires.ftc.teamcode.Subsystems.Clutch;
-import org.firstinspires.ftc.teamcode.Commands.ClutchPushSequence;
 
 public class PushController {
 
@@ -20,8 +19,6 @@ public class PushController {
         new Trigger(() -> gamepadEx.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
                 .whileActiveContinuous(push::close);
 
-        new Trigger(() -> gamepadEx.getButton(GamepadKeys.Button.X)
-                && gamepadEx.getButton(GamepadKeys.Button.Y))
-                .whenActive(() -> scheduler.schedule(new ClutchPushSequence(clutch, push)));
+
     }
 }

@@ -25,7 +25,7 @@ public class TeleOp extends CommandOpMode {
 
     @Override
     public void initialize() {
-        // Subsystems
+        // -------- Subsystems --------
         drive = new Drivetrain(hardwareMap);
         hang = new HangIntake(hardwareMap);
         armIntake = new ArmIntake(hardwareMap);
@@ -33,11 +33,11 @@ public class TeleOp extends CommandOpMode {
         vision = new Vision(hardwareMap);
         push = new Push(hardwareMap);
 
-        // Gamepads
+        // -------- Gamepads --------
         gamepadEx1 = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
 
-        // ---------------- Drive ----------------
+        // -------- Drive --------
         drive.setDefaultCommand(
                 new DriveCommand(
                         drive,
@@ -52,27 +52,27 @@ public class TeleOp extends CommandOpMode {
                 )
         );
 
-        // ---------------- Slow mode ----------------
+        // -------- Slow mode --------
         gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenPressed(drive::switchSlowMode);
 
-        // ---------------- Vision ----------------
+        // -------- Vision (DetectTagCommand) --------
         gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
                 .whileHeld(new DetectTagCommand(vision, telemetry, gamepad1));
 
-        // ---------------- HangIntake (Gamepad2: B = Up, X = Down) ----------------
+        // -------- HangIntake (Gamepad2: B = Up, X = Down) --------
         gamepadEx2.getGamepadButton(GamepadKeys.Button.B)
                 .whileHeld(new HangIntakeCommand(hang, 1.0));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.X)
                 .whileHeld(new HangIntakeCommand(hang, -1.0));
 
-        // ---------------- ArmIntake (Gamepad2: A = Up, Y = Down) ----------------
+        // -------- ArmIntake (Gamepad2: A = Up, Y = Down) --------
         gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
                 .whileHeld(new ArmIntakeCommand(armIntake, 1.0));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.Y)
                 .whileHeld(new ArmIntakeCommand(armIntake, -1.0));
 
-        // ---------------- Door (Gamepad2 D-Pad) ----------------
+        // -------- Door (Gamepad2 D-Pad) --------
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenPressed(new MoveDoorCommand(armIntake, 0));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
@@ -80,19 +80,18 @@ public class TeleOp extends CommandOpMode {
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                 .whenPressed(new MoveDoorCommand(armIntake, 30));
 
-        // ---------------- Clutch (Gamepad2 bumpers) ----------------
+        // -------- Clutch (Gamepad2 bumpers) --------
         gamepadEx2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whenPressed(clutch::open);
         gamepadEx2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whenPressed(clutch::close);
 
-        // ---------------- Push (Gamepad2 triggers) ----------------
+        // -------- Push (Gamepad2 triggers) --------
         new Trigger(() -> gamepadEx2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
                 .whileActiveContinuous(() -> push.open());
 
         new Trigger(() -> gamepadEx2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
                 .whileActiveContinuous(() -> push.close());
-
 
         telemetry.addLine("TeleOp initialized");
         telemetry.update();
@@ -103,4 +102,6 @@ public class TeleOp extends CommandOpMode {
         super.run();
         telemetry.update();
     }
+
+
 }

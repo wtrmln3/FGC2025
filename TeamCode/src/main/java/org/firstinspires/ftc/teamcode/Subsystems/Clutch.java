@@ -10,8 +10,6 @@ public class Clutch {
     private final double CLOSED = 1.0;
     private final double OPEN = 0.0;
 
-    // remember the last commanded target position
-    private double targetPosition = CLOSED;
 
     public Clutch(HardwareMap hardwareMap){
         clutch_1 = hardwareMap.get(Servo.class, "clutch_1");
@@ -25,7 +23,6 @@ public class Clutch {
 
     public void setPosition(double position){
         position = Math.max(0.0, Math.min(1.0, position));
-        targetPosition = position;
         clutch_1.setPosition(position);
         clutch_2.setPosition(position);
     }
@@ -38,25 +35,5 @@ public class Clutch {
         setPosition(CLOSED);
     }
 
-    public double getPosition() {
-        // average of both servos
-        return (clutch_1.getPosition() + clutch_2.getPosition()) / 2.0;
-    }
 
-    // ----------------------------
-    // 🔽 New helper methods
-    // ----------------------------
-
-    /** Returns true if servos are at the last commanded target */
-    public boolean atTarget() {
-        return Math.abs(getPosition() - targetPosition) < 0.05;
-    }
-
-    public boolean isOpen() {
-        return Math.abs(getPosition() - OPEN) < 0.05;
-    }
-
-    public boolean isClosed() {
-        return Math.abs(getPosition() - CLOSED) < 0.05;
-    }
 }
