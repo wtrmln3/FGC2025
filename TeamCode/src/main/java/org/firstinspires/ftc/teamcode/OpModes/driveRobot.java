@@ -24,16 +24,12 @@ public class driveRobot  extends OpMode {
     @Override
     public void loop(){
 
-        double drive = gamepad1.left_stick_y;  // Вперед/назад
-        double turn = gamepad1.right_stick_x;  // Повороты
+        double drive = gamepad1.left_stick_y;
+        double turn = gamepad1.right_stick_x;
 
         double leftPower = drive - turn;
         double rightPower = drive + turn;
 
-        leftFront.setPower(leftPower);
-        leftBack.setPower(leftPower);
-        rightFront.setPower(rightPower);
-        rightBack.setPower(rightPower);
         if (gamepad1.right_bumper){
             rightPower *= 0.1;
             leftPower *= 0.1;

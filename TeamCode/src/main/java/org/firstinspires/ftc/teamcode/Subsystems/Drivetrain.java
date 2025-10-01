@@ -22,37 +22,8 @@ public class Drivetrain extends SubsystemBase {
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-
-        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
         stop();
     }
-
-    /*public void arcadeDrive(double drive, double turn){
-        double leftPower = drive + turn;
-        double rightPower = drive - turn;
-
-        leftPower = Math.max(-1.0, Math.min(1.0, leftPower));
-        rightPower = Math.max(-1.0, Math.min(1.0, rightPower));
-
-        if(slowMode){
-            leftPower *= slow;
-            rightPower *= slow;
-        }
-
-        leftFront.setPower(leftPower);
-        leftBack.setPower(leftPower);
-        rightFront.setPower(rightPower);
-        rightBack.setPower(rightPower);
-    }*/
 
     public void tankDrive(double leftPower, double rightPower){
         leftPower = Math.max(-1.0, Math.min(1.0, leftPower));

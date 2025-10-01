@@ -93,9 +93,6 @@ public class TeleOp extends CommandOpMode {
         new Trigger(() -> gamepadEx2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
                 .whileActiveContinuous(() -> push.close());
 
-        // ---------------- ClutchPushSequence (Gamepad2 → DPAD_RIGHT) ----------------
-        new Trigger(() -> gamepadEx2.getButton(GamepadKeys.Button.DPAD_RIGHT))
-                .whenActive(() -> schedule(new ClutchPushSequence(clutch, push)));
 
         telemetry.addLine("TeleOp initialized");
         telemetry.update();
