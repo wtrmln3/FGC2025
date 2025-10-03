@@ -19,13 +19,18 @@ public class Drivetrain extends SubsystemBase {
         rightFront = hardwareMap.dcMotor.get("rightFront");
         rightBack = hardwareMap.dcMotor.get("rightBack");
 
+        // Reverse right side so forward stick makes robot move forward
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
         stop();
     }
 
-    public void tankDrive(double leftPower, double rightPower){
+
+    public void arcadeDrive(double forward, double turn){
+        double leftPower = forward + turn;
+        double rightPower = forward - turn;
+
         leftPower = Math.max(-1.0, Math.min(1.0, leftPower));
         rightPower = Math.max(-1.0, Math.min(1.0, rightPower));
 
@@ -44,12 +49,8 @@ public class Drivetrain extends SubsystemBase {
         slow = slowFactor;
     }
 
-    public boolean getSlowMode(){
-        return slowMode;
-    }
-
-    public void switchSlowMode(){
-        slowMode = !slowMode;
+    public void setSlowMode(boolean enable){
+        slowMode = enable;
     }
 
     public void stop(){
@@ -58,5 +59,4 @@ public class Drivetrain extends SubsystemBase {
         rightFront.setPower(0);
         rightBack.setPower(0);
     }
-
 }

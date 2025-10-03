@@ -20,7 +20,7 @@ public class DriveCommand extends CommandBase{
 
     @Override
     public void execute(){
-        drive.tankDrive(leftSupplier.getAsDouble(), rightSupplier.getAsDouble());
+        drive.arcadeDrive(leftSupplier.getAsDouble(), rightSupplier.getAsDouble());
     }
 
     @Override

@@ -31,7 +31,7 @@ public class TeleOp extends CommandOpMode {
         armIntake = new ArmIntake(hardwareMap);
         clutch = new Clutch(hardwareMap);
         vision = new Vision(hardwareMap);
-        push = new Push(hardwareMap);
+        push = new Push(hardwareMap, clutch);
 
         // -------- Gamepads --------
         gamepadEx1 = new GamepadEx(gamepad1);
@@ -52,10 +52,6 @@ public class TeleOp extends CommandOpMode {
                 )
         );
 
-        // -------- Slow mode --------
-        gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .whenPressed(drive::switchSlowMode);
-
         // -------- Vision (DetectTagCommand) --------
         gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
                 .whileHeld(new DetectTagCommand(vision, telemetry, gamepad1));
@@ -75,10 +71,8 @@ public class TeleOp extends CommandOpMode {
         // -------- Door (Gamepad2 D-Pad) --------
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenPressed(new MoveDoorCommand(armIntake, 0));
-        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(new MoveDoorCommand(armIntake, 10));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whenPressed(new MoveDoorCommand(armIntake, 30));
+                .whenPressed(new MoveDoorCommand(armIntake, 100));
 
         // -------- Clutch (Gamepad2 bumpers) --------
         gamepadEx2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)

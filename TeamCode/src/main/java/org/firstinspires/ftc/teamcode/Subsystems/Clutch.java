@@ -11,29 +11,27 @@ public class Clutch {
     private final double OPEN = 0.0;
 
 
-    public Clutch(HardwareMap hardwareMap){
+    public Clutch(HardwareMap hardwareMap) {
         clutch_1 = hardwareMap.get(Servo.class, "clutch_1");
         clutch_2 = hardwareMap.get(Servo.class, "clutch_2");
 
         clutch_1.setDirection(Servo.Direction.REVERSE);
         clutch_2.setDirection(Servo.Direction.FORWARD);
 
-        close(); // start closed
+        close();
     }
 
-    public void setPosition(double position){
+    public void setPosition(double position) {
         position = Math.max(0.0, Math.min(1.0, position));
         clutch_1.setPosition(position);
         clutch_2.setPosition(position);
     }
 
-    public void open(){
+    public void open() {
         setPosition(OPEN);
     }
 
-    public void close(){
+    public void close() {
         setPosition(CLOSED);
     }
-
-
 }

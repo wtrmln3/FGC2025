@@ -43,7 +43,7 @@ public class DetectTagCommand extends CommandBase {
             telemetry.addData("Tag offset (px)", offset);
 
             // Rumble if aligned within ~20px
-            if (Math.abs(offset) < 20 && !hasRumbled) {
+            if (Math.abs(offset) < 60 && !hasRumbled) {
                 gamepad.rumble(1.0, 1.0, 500); // full power rumble for 0.5 sec
                 hasRumbled = true;
             }

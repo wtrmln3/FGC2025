@@ -37,7 +37,7 @@ public class TeleOpTest extends CommandOpMode {
         hangIntake = new HangIntake(hardwareMap);
         armIntake = new ArmIntake(hardwareMap);
         clutch = new Clutch(hardwareMap);
-        push = new Push(hardwareMap);
+        push = new Push(hardwareMap, clutch);
         vision = new Vision(hardwareMap);
 
         // Initialize controllers
@@ -45,7 +45,7 @@ public class TeleOpTest extends CommandOpMode {
         hangIntakeController = new HangIntakeController(hangIntake, gamepad2);
         armIntakeController = new ArmIntakeController(armIntake, gamepad2);
         clutchController = new ClutchController(clutch, gamepad2);
-        pushController = new PushController(push, clutch, gamepad2, CommandScheduler.getInstance());
+        pushController = new PushController(push, clutch, gamepad2);
         visionController = new VisionController(vision, telemetry, gamepad1);
 
 

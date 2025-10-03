@@ -13,7 +13,7 @@ public class ArmIntake extends SubsystemBase{
     private DcMotorEx door;
     private PIDController pid;
 
-    private  double kP = 0.01, kI = 0.003, kD = 0.005;
+    private  double kP = 0.02, kI = 0.006, kD = 0.001;
     private int targetPosition;
 
     public ArmIntake(HardwareMap hardwareMap) {

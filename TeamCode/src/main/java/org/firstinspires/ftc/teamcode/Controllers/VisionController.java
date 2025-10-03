@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Subsystems.Vision;
 import org.firstinspires.ftc.teamcode.Commands.DetectTagCommand;
 
+
 public class VisionController {
     public VisionController(Vision vision, Telemetry telemetry, Gamepad gamepad) {
         GamepadEx gamepadEx = new GamepadEx(gamepad);
