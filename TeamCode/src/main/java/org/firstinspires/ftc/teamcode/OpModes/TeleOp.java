@@ -31,7 +31,7 @@ public class TeleOp extends CommandOpMode {
         armIntake = new ArmIntake(hardwareMap);
         clutch = new Clutch(hardwareMap);
         vision = new Vision(hardwareMap);
-        push = new Push(hardwareMap, clutch);
+        push = new Push(hardwareMap);
 
         // -------- Gamepads --------
         gamepadEx1 = new GamepadEx(gamepad1);
@@ -64,15 +64,15 @@ public class TeleOp extends CommandOpMode {
 
         // -------- ArmIntake (Gamepad2: A = Up, Y = Down) --------
         gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
-                .whileHeld(new ArmIntakeCommand(armIntake, 1.0));
+                .whileHeld(new ArmIntakeCommand(armIntake, 1.0));   // intake in
         gamepadEx2.getGamepadButton(GamepadKeys.Button.Y)
-                .whileHeld(new ArmIntakeCommand(armIntake, -1.0));
+                .whileHeld(new ArmIntakeCommand(armIntake, -1.0));  // intake out
 
         // -------- Door (Gamepad2 D-Pad) --------
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenPressed(new MoveDoorCommand(armIntake, 0));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whenPressed(new MoveDoorCommand(armIntake, 100));
+                .whenPressed(new MoveDoorCommand(armIntake, 150));
 
         // -------- Clutch (Gamepad2 bumpers) --------
         gamepadEx2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
@@ -82,10 +82,10 @@ public class TeleOp extends CommandOpMode {
 
         // -------- Push (Gamepad2 triggers) --------
         new Trigger(() -> gamepadEx2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
-                .whileActiveContinuous(() -> push.open());
+                .whenActive(new OpenPushCommand(push, clutch));
 
         new Trigger(() -> gamepadEx2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
-                .whileActiveContinuous(() -> push.close());
+                .whenActive(new ClosePushCommand(push, clutch));
 
         telemetry.addLine("TeleOp initialized");
         telemetry.update();

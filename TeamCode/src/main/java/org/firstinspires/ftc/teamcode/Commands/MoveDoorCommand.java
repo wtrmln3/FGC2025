@@ -1,11 +1,31 @@
 package org.firstinspires.ftc.teamcode.Commands;
 
-import com.arcrobotics.ftclib.command.InstantCommand;
-
+import com.arcrobotics.ftclib.command.CommandBase;
 import org.firstinspires.ftc.teamcode.Subsystems.ArmIntake;
 
-public class MoveDoorCommand extends InstantCommand {
-    public MoveDoorCommand(ArmIntake armIntake, int targetTicks){
-        super(() -> armIntake.setDoorTarget(targetTicks), armIntake);
+public class MoveDoorCommand extends CommandBase {
+    private final ArmIntake armIntake;
+    private final int targetTicks;
+
+    public MoveDoorCommand(ArmIntake armIntake, int targetTicks) {
+        this.armIntake = armIntake;
+        this.targetTicks = targetTicks;
+        addRequirements(armIntake);
+    }
+
+    @Override
+    public void initialize() {
+        armIntake.setTargetPosition(targetTicks);
+    }
+
+    @Override
+    public boolean isFinished() {
+        // stop automatically when the PID target is reached
+        return Math.abs(armIntake.getTargetPosition() - armIntake.getCurrentPosition()) < 10;
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        armIntake.stop();
     }
 }

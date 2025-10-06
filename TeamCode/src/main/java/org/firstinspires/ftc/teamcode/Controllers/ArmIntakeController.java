@@ -12,18 +12,16 @@ public class ArmIntakeController {
     public ArmIntakeController(ArmIntake armIntake, Gamepad gamepad) {
         GamepadEx gamepadEx = new GamepadEx(gamepad);
 
-        // Arm intake motor
+        // Intake controls
         gamepadEx.getGamepadButton(GamepadKeys.Button.A)
-                .whileHeld(new ArmIntakeCommand(armIntake, 1.0));
+                .whileHeld(new ArmIntakeCommand(armIntake, 1.0));   // intake in
         gamepadEx.getGamepadButton(GamepadKeys.Button.Y)
-                .whileHeld(new ArmIntakeCommand(armIntake, -1.0));
+                .whileHeld(new ArmIntakeCommand(armIntake, -1.0));  // intake out
 
-        // Door positions
+        // Arm/door positions (adjust tick targets as needed)
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenPressed(new MoveDoorCommand(armIntake, 0));
-        gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(new MoveDoorCommand(armIntake, 40));
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whenPressed(new MoveDoorCommand(armIntake, 80));
+                .whenPressed(new MoveDoorCommand(armIntake, 150));
     }
 }

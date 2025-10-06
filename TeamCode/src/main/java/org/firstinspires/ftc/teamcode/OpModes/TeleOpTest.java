@@ -37,7 +37,7 @@ public class TeleOpTest extends CommandOpMode {
         hangIntake = new HangIntake(hardwareMap);
         armIntake = new ArmIntake(hardwareMap);
         clutch = new Clutch(hardwareMap);
-        push = new Push(hardwareMap, clutch);
+        push = new Push(hardwareMap);
         vision = new Vision(hardwareMap);
 
         // Initialize controllers
